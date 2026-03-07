@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary - dark blue background */
+  --color-primary-600: #1e3a5f;
+  --color-primary-700: #152c4a;
+  --color-primary-800: #0f2035;
+  --color-primary-900: #0a1525;
+  --color-primary-950: #060d18;
+
+  /* Accent - coral/pink for buttons */
+  --color-accent-400: #ff8fa3;
+  --color-accent-500: #ff6b8a;
+  --color-accent-600: #e85578;
+
+  /* Text colors */
+  --color-text-50: #f8fafc;
+  --color-text-100: #f1f5f9;
+  --color-text-300: #cbd5e1;
+  --color-text-400: #94a3b8;
+
+  --background: var(--color-primary-900);
+  --foreground: var(--color-text-50);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+  --color-primary-950: var(--color-primary-950);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-text-50: var(--color-text-50);
+  --color-text-100: var(--color-text-100);
+  --color-text-300: var(--color-text-300);
+  --color-text-400: var(--color-text-400);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-600);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-500);
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-accent-500);
+  color: var(--color-text-50);
 }
