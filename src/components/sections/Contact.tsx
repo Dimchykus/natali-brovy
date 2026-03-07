@@ -1,4 +1,4 @@
-import { MapPin, Phone, Clock, Instagram, Send } from "lucide-react";
+import { MapPin, Phone, Clock, Instagram } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 const contactInfo = [
