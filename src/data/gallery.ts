@@ -3,38 +3,26 @@ import { GalleryItem } from "@/types";
 export const galleryItems: GalleryItem[] = [
   {
     id: "1",
-    beforeImage: "/images/before-1.jpg",
-    afterImage: "/images/after-1.jpg",
+    beforeImage: "/image1.png",
+    afterImage: "/image1.png",
     title: "Ламінування брів",
   },
   {
     id: "2",
-    beforeImage: "/images/before-2.jpg",
-    afterImage: "/images/after-2.jpg",
+    beforeImage: "/image2.png",
+    afterImage: "/image2.png",
     title: "Архітектура брів",
   },
   {
     id: "3",
-    beforeImage: "/images/before-3.jpg",
-    afterImage: "/images/after-3.jpg",
+    beforeImage: "/image3.png",
+    afterImage: "/image3.png",
     title: "Корекція та фарбування",
   },
   {
     id: "4",
-    beforeImage: "/images/before-4.jpg",
-    afterImage: "/images/after-4.jpg",
-    title: "Ламінування брів",
-  },
-  {
-    id: "5",
-    beforeImage: "/images/before-5.jpg",
-    afterImage: "/images/after-5.jpg",
-    title: "Архітектура брів",
-  },
-  {
-    id: "6",
-    beforeImage: "/images/before-6.jpg",
-    afterImage: "/images/after-6.jpg",
+    beforeImage: "/image4.png",
+    afterImage: "/image4.png",
     title: "Корекція брів",
   },
 ];

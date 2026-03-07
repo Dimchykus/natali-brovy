@@ -5,6 +5,7 @@ import { Send, Check, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { services } from "@/data/services";
 import { BookingFormData } from "@/types";
+import { createBooking } from "@/lib/actions/booking";
 
 export default function Booking() {
   const [formData, setFormData] = useState<BookingFormData>({
@@ -16,6 +17,7 @@ export default function Booking() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<BookingFormData>>({});
 
   const validateForm = (): boolean => {
@@ -51,28 +53,24 @@ export default function Booking() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setSubmitError(null);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsLoading(false);
-    setIsSuccess(true);
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      service: "",
-      message: "",
-    });
-
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSuccess(false), 5000);
+    try {
+      await createBooking(formData);
+      setIsSuccess(true);
+      setFormData({ name: "", phone: "", email: "", service: "", message: "" });
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Помилка відправки. Спробуйте ще раз.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -223,6 +221,13 @@ export default function Booking() {
                 placeholder="Додаткова інформація або побажання..."
               />
             </div>
+
+            {/* Submit error */}
+            {submitError && (
+              <p className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                {submitError}
+              </p>
+            )}
 
             {/* Submit */}
             <button

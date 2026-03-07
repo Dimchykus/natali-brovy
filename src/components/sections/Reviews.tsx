@@ -13,10 +13,7 @@ export default function Reviews() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="rounded-2xl bg-primary-900 p-6"
-            >
+            <div key={review.id} className="rounded-2xl bg-primary-900 p-6">
               {/* Stars */}
               <div className="mb-4 flex gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { galleryItems } from "@/data/gallery";
@@ -21,7 +22,7 @@ export default function Gallery() {
   const goToPrevious = () => {
     if (selectedIndex !== null) {
       setSelectedIndex(
-        selectedIndex === 0 ? galleryItems.length - 1 : selectedIndex - 1
+        selectedIndex === 0 ? galleryItems.length - 1 : selectedIndex - 1,
       );
       setShowAfter(true);
     }
@@ -30,7 +31,7 @@ export default function Gallery() {
   const goToNext = () => {
     if (selectedIndex !== null) {
       setSelectedIndex(
-        selectedIndex === galleryItems.length - 1 ? 0 : selectedIndex + 1
+        selectedIndex === galleryItems.length - 1 ? 0 : selectedIndex + 1,
       );
       setShowAfter(true);
     }
@@ -41,7 +42,7 @@ export default function Gallery() {
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           title="Галерея робіт"
-          subtitle="Результати моєї роботи: до та після"
+          // subtitle="Результати моєї роботи: до та після"
         />
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
@@ -51,13 +52,12 @@ export default function Gallery() {
               onClick={() => openLightbox(index)}
               className="group relative aspect-square overflow-hidden rounded-xl bg-primary-800"
             >
-              {/* Placeholder for image */}
-              <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary-700 to-primary-800">
-                <div className="text-center">
-                  <div className="mx-auto mb-2 h-16 w-16 rounded-full bg-accent-500/20" />
-                  <p className="text-xs text-text-400">{item.title}</p>
-                </div>
-              </div>
+              <Image
+                src={item.afterImage}
+                alt={item.title}
+                fill
+                className="object-cover"
+              />
 
               {/* Overlay */}
               <div className="absolute inset-0 flex items-center justify-center bg-primary-950/60 opacity-0 transition-opacity group-hover:opacity-100">
@@ -94,18 +94,12 @@ export default function Gallery() {
           {/* Image container */}
           <div className="max-h-[80vh] max-w-4xl">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-primary-800">
-              {/* Placeholder */}
-              <div className="flex h-full items-center justify-center">
-                <div className="text-center">
-                  <div className="mx-auto mb-4 h-32 w-32 rounded-full bg-accent-500/20" />
-                  <p className="text-lg text-text-100">
-                    {showAfter ? "Після" : "До"}
-                  </p>
-                  <p className="text-sm text-text-400">
-                    {galleryItems[selectedIndex].title}
-                  </p>
-                </div>
-              </div>
+              <Image
+                src={showAfter ? galleryItems[selectedIndex].afterImage : galleryItems[selectedIndex].beforeImage}
+                alt={galleryItems[selectedIndex].title}
+                fill
+                className="object-cover"
+              />
             </div>
 
             {/* Toggle buttons */}

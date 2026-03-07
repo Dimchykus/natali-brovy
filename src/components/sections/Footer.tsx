@@ -4,13 +4,13 @@ const socialLinks = [
   {
     icon: Instagram,
     label: "Instagram",
-    href: "https://instagram.com/browart_kyiv",
+    href: "https://www.instagram.com/natali.brows.art/",
   },
-  {
-    icon: Send,
-    label: "Telegram",
-    href: "https://t.me/browart_kyiv",
-  },
+  // {
+  //   icon: Send,
+  //   label: "Telegram",
+  //   href: "https://t.me/browart_kyiv",
+  // },
 ];
 
 export default function Footer() {
@@ -22,12 +22,12 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between gap-6 border-t border-primary-800 pt-8 md:flex-row">
           {/* Logo */}
           <a href="#" className="text-xl font-bold text-text-50">
-            <span className="text-accent-500">Brow</span>Art
+            <span className="text-accent-500">Natali</span> Brows
           </a>
 
           {/* Copyright */}
           <p className="text-sm text-text-400">
-            &copy; {currentYear} BrowArt. Всі права захищено.
+            &copy; {currentYear} Natali Brows. Всі права захищено.
           </p>
 
           {/* Social Links */}

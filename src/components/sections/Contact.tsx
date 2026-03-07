@@ -5,7 +5,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Адреса",
-    value: "м. Київ, вул. Хрещатик, 1, оф. 101",
+    value: "м. Ужгород",
   },
   {
     icon: Phone,
@@ -24,15 +24,15 @@ const socialLinks = [
   {
     icon: Instagram,
     label: "Instagram",
-    href: "https://instagram.com/browart_kyiv",
-    username: "@browart_kyiv",
+    href: "https://www.instagram.com/natali.brows.art/",
+    username: "@natali.brows.art",
   },
-  {
-    icon: Send,
-    label: "Telegram",
-    href: "https://t.me/browart_kyiv",
-    username: "@browart_kyiv",
-  },
+  // {
+  //   icon: Send,
+  //   label: "Telegram",
+  //   href: "https://t.me/browart_kyiv",
+  //   username: "@browart_kyiv",
+  // },
 ];
 
 export default function Contact() {
@@ -47,10 +47,7 @@ export default function Contact() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Contact Info Cards */}
           {contactInfo.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl bg-primary-900 p-6"
-            >
+            <div key={item.label} className="rounded-2xl bg-primary-900 p-6">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent-500/20">
                 <item.icon className="h-6 w-6 text-accent-400" />
               </div>
@@ -87,18 +84,6 @@ export default function Contact() {
                 <span>{link.username}</span>
               </a>
             ))}
-          </div>
-        </div>
-
-        {/* Map placeholder */}
-        <div className="mt-12 overflow-hidden rounded-2xl">
-          <div className="flex h-64 items-center justify-center bg-primary-900 md:h-80">
-            <div className="text-center">
-              <MapPin className="mx-auto mb-4 h-12 w-12 text-accent-500/50" />
-              <p className="text-text-400">
-                Тут буде карта з розташуванням
-              </p>
-            </div>
           </div>
         </div>
       </div>

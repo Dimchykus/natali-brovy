@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ReactQueryProvider from "@/lib/providers/query";
+import { ThemeProvider } from "@/lib/providers/theme";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,22 +16,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BrowArt | Бровіст Київ - Natali",
+  title: "Natali Brows | Бровіст Ужгород",
   description:
-    "Професійний бровіст у Києві. Корекція, фарбування, ламінування та архітектура брів. Запишіться на процедуру онлайн.",
+    "Професійний бровіст в Ужгороді. Корекція, фарбування, ламінування та архітектура брів. Запишіться на процедуру онлайн.",
   keywords: [
     "бровіст",
     "брови",
     "корекція брів",
     "ламінування брів",
-    "Київ",
+    "Ужгород",
     "архітектура брів",
   ],
   authors: [{ name: "Natali" }],
   openGraph: {
-    title: "BrowArt | Бровіст Київ",
+    title: "Natali Brows | Бровіст Ужгород",
     description:
-      "Професійний бровіст у Києві. Корекція, фарбування, ламінування та архітектура брів.",
+      "Професійний бровіст в Ужгороді. Корекція, фарбування, ламінування та архітектура брів.",
     type: "website",
     locale: "uk_UA",
   },
@@ -40,11 +43,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uk">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="min-h-[100%] flex flex-col"
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased grow-1 flex flex-col bg-neutral-50`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          disableTransitionOnChange
+        >
+          <ReactQueryProvider>
+            {children}
+            <Toaster />
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -20,7 +20,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
           <a href="#" className="text-xl font-bold text-text-50">
-            <span className="text-accent-500">Brow</span>Art
+            <span className="text-accent-500">Natali</span> Brows
           </a>
 
           {/* Desktop Navigation */}
