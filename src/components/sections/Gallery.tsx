@@ -1,56 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { galleryItems } from "@/data/gallery";
+import { useGSAPContext } from "@/lib/providers/gsap";
 
 export default function Gallery() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showAfter, setShowAfter] = useState(true);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { isReady, prefersReducedMotion } = useGSAPContext();
 
-  const openLightbox = (index: number) => {
-    setSelectedIndex(index);
-    setShowAfter(true);
-  };
+  useGSAP(
+    () => {
+      if (!isReady || prefersReducedMotion) return;
 
-  const closeLightbox = () => {
-    setSelectedIndex(null);
-  };
+      gsap.registerPlugin(ScrollTrigger);
 
-  const goToPrevious = () => {
-    if (selectedIndex !== null) {
-      setSelectedIndex(
-        selectedIndex === 0 ? galleryItems.length - 1 : selectedIndex - 1,
+      // Animate heading
+      gsap.fromTo(
+        ".gallery-heading",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gallery-heading",
+            start: "top 85%",
+            once: true,
+          },
+        }
       );
-      setShowAfter(true);
-    }
-  };
 
-  const goToNext = () => {
-    if (selectedIndex !== null) {
-      setSelectedIndex(
-        selectedIndex === galleryItems.length - 1 ? 0 : selectedIndex + 1,
+      // Animate gallery items with stagger
+      gsap.fromTo(
+        ".gallery-item",
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gallery-grid",
+            start: "top 80%",
+            once: true,
+          },
+        }
       );
-      setShowAfter(true);
-    }
-  };
+    },
+    { scope: sectionRef, dependencies: [isReady, prefersReducedMotion] }
+  );
+
+  const initialClass = prefersReducedMotion ? "" : "opacity-0";
 
   return (
-    <section id="gallery" className="bg-primary-900 px-4 py-20 md:py-28">
+    <section
+      ref={sectionRef}
+      id="gallery"
+      className="bg-primary-900 px-4 py-20 md:py-28"
+    >
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          title="Галерея робіт"
-          // subtitle="Результати моєї роботи: до та після"
-        />
+        <div className={`gallery-heading ${initialClass}`}>
+          <SectionHeading title="Галерея робіт" />
+        </div>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
-          {galleryItems.map((item, index) => (
-            <button
+        <div className="gallery-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
+          {galleryItems.map((item) => (
+            <div
               key={item.id}
-              onClick={() => openLightbox(index)}
-              className="group relative aspect-square overflow-hidden rounded-xl bg-primary-800"
+              className={`gallery-item relative aspect-square overflow-hidden rounded-xl bg-primary-800 ${initialClass}`}
             >
               <Image
                 src={item.afterImage}
@@ -58,85 +82,10 @@ export default function Gallery() {
                 fill
                 className="object-cover"
               />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-primary-950/60 opacity-0 transition-opacity group-hover:opacity-100">
-                <span className="rounded-full bg-accent-500 px-4 py-2 text-sm font-medium text-white">
-                  Переглянути
-                </span>
-              </div>
-            </button>
+            </div>
           ))}
         </div>
       </div>
-
-      {/* Lightbox */}
-      {selectedIndex !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary-950/95 p-4">
-          {/* Close button */}
-          <button
-            onClick={closeLightbox}
-            className="absolute right-4 top-4 text-text-300 transition-colors hover:text-text-50"
-            aria-label="Закрити"
-          >
-            <X size={32} />
-          </button>
-
-          {/* Previous button */}
-          <button
-            onClick={goToPrevious}
-            className="absolute left-4 text-text-300 transition-colors hover:text-text-50"
-            aria-label="Попереднє"
-          >
-            <ChevronLeft size={40} />
-          </button>
-
-          {/* Image container */}
-          <div className="max-h-[80vh] max-w-4xl">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-primary-800">
-              <Image
-                src={showAfter ? galleryItems[selectedIndex].afterImage : galleryItems[selectedIndex].beforeImage}
-                alt={galleryItems[selectedIndex].title}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Toggle buttons */}
-            <div className="mt-4 flex justify-center gap-4">
-              <button
-                onClick={() => setShowAfter(false)}
-                className={`rounded-full px-6 py-2 text-sm font-medium transition-colors ${
-                  !showAfter
-                    ? "bg-accent-500 text-white"
-                    : "bg-primary-700 text-text-300 hover:bg-primary-600"
-                }`}
-              >
-                До
-              </button>
-              <button
-                onClick={() => setShowAfter(true)}
-                className={`rounded-full px-6 py-2 text-sm font-medium transition-colors ${
-                  showAfter
-                    ? "bg-accent-500 text-white"
-                    : "bg-primary-700 text-text-300 hover:bg-primary-600"
-                }`}
-              >
-                Після
-              </button>
-            </div>
-          </div>
-
-          {/* Next button */}
-          <button
-            onClick={goToNext}
-            className="absolute right-4 text-text-300 transition-colors hover:text-text-50"
-            aria-label="Наступне"
-          >
-            <ChevronRight size={40} />
-          </button>
-        </div>
-      )}
     </section>
   );
 }

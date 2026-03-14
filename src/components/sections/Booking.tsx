@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Send, Check, Loader2 } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { services } from "@/data/services";
 import { BookingFormData } from "@/types";
 import { createBooking } from "@/lib/actions/booking";
+import { useGSAPContext } from "@/lib/providers/gsap";
 
 export default function Booking() {
   const [formData, setFormData] = useState<BookingFormData>({
@@ -19,6 +23,53 @@ export default function Booking() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<BookingFormData>>({});
+  const sectionRef = useRef<HTMLElement>(null);
+  const { isReady, prefersReducedMotion } = useGSAPContext();
+
+  useGSAP(
+    () => {
+      if (!isReady || prefersReducedMotion) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Animate heading
+      gsap.fromTo(
+        ".booking-heading",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".booking-heading",
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
+
+      // Animate form
+      gsap.fromTo(
+        ".booking-form",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".booking-form",
+            start: "top 80%",
+            once: true,
+          },
+        }
+      );
+    },
+    { scope: sectionRef, dependencies: [isReady, prefersReducedMotion] }
+  );
+
+  const initialClass = prefersReducedMotion ? "" : "opacity-0";
 
   const validateForm = (): boolean => {
     const newErrors: Partial<BookingFormData> = {};
@@ -58,10 +109,18 @@ export default function Booking() {
     try {
       await createBooking(formData);
       setIsSuccess(true);
-      setFormData({ name: "", phone: "", email: "", service: "", message: "" });
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        service: "",
+        message: "",
+      });
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Помилка відправки. Спробуйте ще раз.");
+      setSubmitError(
+        err instanceof Error ? err.message : "Помилка відправки. Спробуйте ще раз."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +129,7 @@ export default function Booking() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -81,12 +140,18 @@ export default function Booking() {
   };
 
   return (
-    <section id="booking" className="bg-primary-900 px-4 py-20 md:py-28">
+    <section
+      ref={sectionRef}
+      id="booking"
+      className="bg-primary-900 px-4 py-20 md:py-28"
+    >
       <div className="mx-auto max-w-2xl">
-        <SectionHeading
-          title="Записатись на процедуру"
-          subtitle="Заповніть форму і я зв'яжусь з вами для підтвердження"
-        />
+        <div className={`booking-heading ${initialClass}`}>
+          <SectionHeading
+            title="Записатись на процедуру"
+            subtitle="Заповніть форму і я зв'яжусь з вами для підтвердження"
+          />
+        </div>
 
         {isSuccess ? (
           <div className="rounded-2xl bg-green-500/10 p-8 text-center">
@@ -101,7 +166,10 @@ export default function Booking() {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className={`booking-form space-y-6 ${initialClass}`}
+          >
             {/* Name */}
             <div>
               <label

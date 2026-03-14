@@ -6,7 +6,10 @@
       "Bash(yarn add:*)",
       "Bash(mkdir:*)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "mcp__gsap-master__understand_and_create_animation",
+      "mcp__gsap-master__generate_complete_setup",
+      "mcp__gsap-master__create_production_pattern"
     ]
   }
 }
